@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react'
-import { Animated, Easing, Image } from 'react-native'
+import React, { useEffect, useRef } from 'react';
+import { Animated, Easing } from 'react-native';
+import { calcResolutionDivice } from '../helpers/calcResolutionDivice';
 
 export const Spinner = () => {
     const rotateValue = useRef(new Animated.Value(0)).current;
-    
+    const sizeSpinner = calcResolutionDivice({low:40, medium:70, high:100});
     useEffect(() => {
         Animated.loop(
             Animated.timing(rotateValue,{
@@ -22,8 +23,8 @@ export const Spinner = () => {
         <Animated.Image
             source={require('../assets/img-spinner.png')} 
             style={{
-                width:100, 
-                height:100,
+                width:sizeSpinner, 
+                height:sizeSpinner,
                 transform: [{rotate: spin}]
             }}
         />
