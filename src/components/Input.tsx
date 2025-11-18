@@ -11,7 +11,8 @@ interface Props {
     placeholderFocus: string;
     focus: boolean;
     keyboardTypeOptions: KeyboardTypeOptions;
-    marginTop?: DimensionValue; 
+    marginTop?: DimensionValue;
+    marginBottom?: DimensionValue;
     inputPassword?: boolean;
     onFocus: (field:string, value:boolean) => void;
     onChangeText:(field:string, value:string) => void;
@@ -25,6 +26,7 @@ export const Input = ({
     focus, 
     keyboardTypeOptions,
     marginTop=0, 
+    marginBottom=0,
     inputPassword=false,
     onFocus, 
     onChangeText
@@ -34,7 +36,8 @@ export const Input = ({
         <View style={styles.container}>
             <View style={{
                 ...styles.border,
-                marginTop:marginTop, 
+                marginTop:marginTop,
+                marginBottom:marginBottom,
                 backgroundColor: focus ? globalColors.soft_blue : globalColors.white}}
             >
                 <View style={{
@@ -47,14 +50,14 @@ export const Input = ({
                         transform: [{translateY: (focus || value!=='') ? -17 : 0}], 
                         fontSize: (focus || value!=='') ? 12 : 20}}
                     >
-                        {focus ? placeholderFocus : placeholder }
+                        {(focus || value!=='') ? placeholderFocus : placeholder }
                     </Text>
-                    <TextInput 
+                    <TextInput
                         style={{
                             ...styles.input, 
                             height: (focus || value!=='') ? '70%' : '100%',
                             paddingRight:!inputPassword ? 50 : 100,
-                        }} 
+                        }}
                         value={value}
                         keyboardType={keyboardTypeOptions}
                         onFocus={() => onFocus(name, true)}
@@ -67,13 +70,19 @@ export const Input = ({
                             onPress={() => setShowPassword(!showPassword)}
                         >
                             {showPassword 
-                                ?   <Icons name="eye-off" size={20}/>
+                                ?   <Icons name="eye-off" size={25}/>
                                 :   <Icons name="eye" size={25}/>
                             }
                         </Pressable>
                     }
                     {(value !== '') &&
-                        <Pressable style={styles.btnClear} onPress={() => onChangeText(name, '')}>
+                        <Pressable 
+                            style={({pressed}) => [
+                                styles.btnClear,
+                                {opacity: pressed ? 0.4 : 1}
+                            ]} 
+                            onPress={() => onChangeText(name, '')}
+                        >
                             <Icons name="close" size={20}/>
                         </Pressable>
                     }
